@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Post list</title>
+</head>
+<body>
+<style>
+    a {
+    text-decoration: none;
+    }
+    a: hover {
+<!--    font-size: 25px;-->
+        color: yellow
+    }
+</style>
+<!--    {{ items }}-->
+    <div style="margin-left: 42%">
+        <p style="font-size: 35px">My blog</p>
+    </div>
+
+    <div style="margin-left: 50px; margin-top: 40px; margin-bottom: 40px;">
+        <a style="font-size: 15px; color: black; border: 1px solid; border-radius: 20px; padding: 10px"
+           href="{% url 'post_new' %}">
+            Create new post
+        </a>
+    </div>
+
+    {% for post in items %}
+    <div style="margin: 20px; display: inline-block">
+        <div style="border: 1px solid">
+            <div style="margin: 20px; text-align: center">
+                <a href="{% url 'post_detail' post_pk=post.pk %}">{{ post.title }}</a>
+            </div>
+<!--            <div>{{ post.text }}</div>-->
+            <div style="border-top: 1px solid">{{ post.publish_date }}</div>
+        </div>
+    </div>
+    {% endfor %}
+</body>
+</html>
