@@ -6,16 +6,22 @@ from blog.models import Post
 from blog.forms import PostForm
 
 def post_list(request):
-    posts = Post.objects.all()
-    context = {'items': posts}
-    return render(request, 'blog/post_list.html', context)
+    posts = Post.objects.all().filter(published=True)
+    return render(request, 'blog/post_list.html', {'items': posts})
 
+def post_draft(request):
+    posts = Post.objects.all().filter(published=False)
+    return render(request, 'blog/post_list.html', {'items': posts})
 
+def published_post(request, post_pk):
+    post = Post.objects.get(pk=post_pk)
+    post.published = True
+    post.save()
+    return render(request, 'blog/post_detail.html', {'post': post})
 
 def post_detail(request, post_pk):
     post = Post.objects.get(pk=post_pk)
-    context = {'post': post}
-    return render(request, 'blog/post_detail.html', context)
+    return render(request, 'blog/post_detail.html', {'post': post})
 
 def post_new(request):
     if request.method == "GET":

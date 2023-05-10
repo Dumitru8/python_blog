@@ -24,6 +24,15 @@
            href="{% url 'post_new' %}">
             Create new post
         </a>
+
+        <a style="font-size: 15px; color: black; border: 1px solid; border-radius: 20px; padding: 10px"
+           href="{% url 'post_draft' %}">
+            Posts drafts
+        </a>
+        <a style="font-size: 15px; color: black; border: 1px solid; border-radius: 20px; padding: 10px"
+           href="{% url 'post_list' %}">
+            Published posts
+        </a>
     </div>
 
     {% for post in items %}
