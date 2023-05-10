@@ -7,7 +7,15 @@ class Post(models.Model):
     created_date = models.DateTimeField(verbose_name='Created Date', auto_now_add=True)
     publish_date = models.DateTimeField(verbose_name='Publish Date', auto_now_add=True)
     published = models.BooleanField(default=False)
+
     def __str__(self):
         return f'{self.title}'
 
 
+class Comments(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    text = models.TextField(verbose_name='Text')
+    published_date = models.DateTimeField(verbose_name='published_date', auto_now_add=True,)
+
+    def __str__(self):
+        return f'{self.text}'

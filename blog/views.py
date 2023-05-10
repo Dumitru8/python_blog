@@ -1,17 +1,19 @@
 from datetime import datetime
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
-from blog.models import Post
+from blog.models import Post, Comments
 from blog.forms import PostForm
+
 
 def post_list(request):
     posts = Post.objects.all().filter(published=True)
     return render(request, 'blog/post_list.html', {'items': posts})
 
+
 def post_draft(request):
     posts = Post.objects.all().filter(published=False)
     return render(request, 'blog/post_list.html', {'items': posts})
+
 
 def published_post(request, post_pk):
     post = Post.objects.get(pk=post_pk)
@@ -19,9 +21,12 @@ def published_post(request, post_pk):
     post.save()
     return render(request, 'blog/post_detail.html', {'post': post})
 
+
 def post_detail(request, post_pk):
     post = Post.objects.get(pk=post_pk)
-    return render(request, 'blog/post_detail.html', {'post': post})
+    comments = Comments.objects.all()
+    return render(request, 'blog/post_detail.html', {'post': post, 'comments': comments})
+
 
 def post_new(request):
     if request.method == "GET":
@@ -35,6 +40,7 @@ def post_new(request):
             post.publish_date = datetime.now()
             post.save()
             return redirect('post_detail', post_pk=post.pk)
+
 
 def post_edit(request, post_pk):
     post = get_object_or_404(Post, pk=post_pk)
@@ -50,8 +56,10 @@ def post_edit(request, post_pk):
             post.save()
             return redirect('post_detail', post_pk=post.pk)
 
+
 def post_delete(request, post_pk):
     post = get_object_or_404(Post, pk=post_pk).delete()
     return redirect('post_list')
+
 
 
