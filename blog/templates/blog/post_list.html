@@ -19,6 +19,13 @@
         <p style="font-size: 35px">My blog</p>
     </div>
 
+<div style="font-size: 17px; margin-left: 88%; position: absolute; margin-right: 30px">
+    <h2>Category:</h2>
+    {% for i in category %}
+        <a href="{% url 'categories' category_pk=i.pk %}">{{ i }}</a><br>
+    {% endfor %}
+</div>
+
     <div style="margin-left: 50px; margin-top: 40px; margin-bottom: 40px;">
         <a style="font-size: 15px; color: black; border: 1px solid; border-radius: 20px; padding: 10px"
            href="{% url 'post_new' %}">
@@ -34,7 +41,7 @@
             Published posts
         </a>
     </div>
-
+    <div style="margin-left: 30px; margin-bottom: 10px;">Number of posts: {{counter}}</div>
     {% for post in items %}
     <div style="margin: 20px; display: inline-block">
         <div style="border: 1px solid">

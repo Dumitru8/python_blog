@@ -7,6 +7,8 @@ class Post(models.Model):
     created_date = models.DateTimeField(verbose_name='Created Date', auto_now_add=True)
     publish_date = models.DateTimeField(verbose_name='Publish Date', auto_now_add=True)
     published = models.BooleanField(default=False)
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, blank=True, null=True)
+
 
     def __str__(self):
         return f'{self.title}'
@@ -18,5 +20,10 @@ class Comments(models.Model):
     published_date = models.DateTimeField(verbose_name='published_date', auto_now_add=True,)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f'{self.text}'
+
+class Category(models.Model):
+    text = models.CharField(max_length=52, verbose_name='Text')
     def __str__(self):
         return f'{self.text}'

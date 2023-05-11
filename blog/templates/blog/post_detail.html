@@ -22,7 +22,11 @@
     <a style="font-size: 35px; color: black" href="{% url 'post_list' %}">My blog</a>
 </div>
 
-<div style="text-align: center; margin-top: 40px; margin-bottom: 40px; ">
+<div style="text-align: right; margin-right: 30px; margin-top: 40px; margin-bottom: 40px; font-size: 20px;">
+    Category: {{post.category}}
+</div>
+
+<div style="text-align: center; margin-top: 40px; margin-bottom: 40px;">
     <a style="margin: 5px; font-size: 15px; color: black; border: 1px solid; border-radius: 20px; padding: 10px"
        href="{% url 'post_list' %}">
         Back to post
