@@ -14,44 +14,56 @@
     }
 
 
+
+
 </style>
 <!--    {{ items }}-->
-    <div style="text-align: center; margin-top: 40px; margin-bottom: 40px">
-        <a style="font-size: 35px; color: black" href="{% url 'post_list' %}">My blog</a>
-    </div>
+<div style="text-align: center; margin-top: 40px; margin-bottom: 40px">
+    <a style="font-size: 35px; color: black" href="{% url 'post_list' %}">My blog</a>
+</div>
 
-    <div style="text-align: center; margin-top: 40px; margin-bottom: 40px; ">
-        <a style="margin: 5px; font-size: 15px; color: black; border: 1px solid; border-radius: 20px; padding: 10px"
-           href="{% url 'post_list' %}">
-            Back to post
-        </a>
-        <a style="margin: 5px; font-size: 15px; color: black; border: 1px solid; border-radius: 20px; padding: 10px"
-           href="{% url 'post_edit' post_pk=post.pk %}">
-            Edit
-        </a>
-        {% if post.published == False %}
-        <a style="margin: 5px; font-size: 15px; color: black; border: 1px solid; border-radius: 20px; padding: 10px"
-           href="{% url 'published_post' post_pk=post.pk %}">
-            Publish
-        </a> 
-        {% endif %}
-        <a style="margin: 5px; font-size: 15px; color: black; border: 1px solid; border-radius: 20px; padding: 10px"
-           href="{% url 'post_delete' post_pk=post.pk %}">
-            Delete
-        </a>
-    </div>
+<div style="text-align: center; margin-top: 40px; margin-bottom: 40px; ">
+    <a style="margin: 5px; font-size: 15px; color: black; border: 1px solid; border-radius: 20px; padding: 10px"
+       href="{% url 'post_list' %}">
+        Back to post
+    </a>
+    <a style="margin: 5px; font-size: 15px; color: black; border: 1px solid; border-radius: 20px; padding: 10px"
+       href="{% url 'post_edit' post_pk=post.pk %}">
+        Edit
+    </a>
+    {% if post.published == False %}
+    <a style="margin: 5px; font-size: 15px; color: black; border: 1px solid; border-radius: 20px; padding: 10px"
+       href="{% url 'published_post' post_pk=post.pk %}">
+        Publish
+    </a>
+    {% endif %}
+    <a style="margin: 5px; font-size: 15px; color: black; border: 1px solid; border-radius: 20px; padding: 10px"
+       href="{% url 'post_delete' post_pk=post.pk %}">
+        Delete
+    </a>
+</div>
 
-    <div style="">
-        <div style="text-align: center">
-            <div style="">{{ post.publish_date }}</div>
-            <div style="font-size: 30px; padding: 20px">
-                <a>{{ post.title }}</a>
-            </div>
-            <div style="margin-top: 30px">
-                {{ post.text }}
-            </div>
+<div style="">
+    <div style="text-align: center">
+        <div style="">{{ post.publish_date }}</div>
+        <div style="font-size: 30px; padding: 20px">
+            <a>{{ post.title }}</a>
+        </div>
+        <div style="margin-top: 30px">
+            {{ post.text }}
         </div>
     </div>
+</div>
+<br>
+<div style="font-size: 20px; margin 10px; text-align: justify">
+    {% for i in comments %}
+        {{ i.author }}<br>
+        {{ i }}<br>
+        <em>{{ i.published_date }}</em>
+    <br><br>
+    {% endfor %}
+</div>
+
 
 </body>
 </html>

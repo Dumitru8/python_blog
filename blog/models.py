@@ -16,6 +16,7 @@ class Comments(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     text = models.TextField(verbose_name='Text')
     published_date = models.DateTimeField(verbose_name='published_date', auto_now_add=True,)
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.text}'

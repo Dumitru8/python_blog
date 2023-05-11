@@ -24,7 +24,8 @@ def published_post(request, post_pk):
 
 def post_detail(request, post_pk):
     post = Post.objects.get(pk=post_pk)
-    comments = Comments.objects.all()
+    comments = Comments.objects.filter(post=post_pk)
+
     return render(request, 'blog/post_detail.html', {'post': post, 'comments': comments})
 
 
