@@ -2,7 +2,7 @@ from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from blog.models import Post, Comments, Category
-from blog.forms import PostForm
+from blog.forms import PostForm, CommentForm
 
 
 def post_list(request):
@@ -14,7 +14,11 @@ def post_list(request):
 
 def post_draft(request):
     posts = Post.objects.all().filter(published=False)
-    return render(request, 'blog/post_list.html', {'items': posts})
+    category = Category.objects.all()
+    counter = posts.count()
+    return render(request, 'blog/post_list.html', {'items': posts,
+                                                   'category': category,
+                                                   'counter': counter})
 
 
 def published_post(request, post_pk):
@@ -28,14 +32,28 @@ def post_detail(request, post_pk):
     post = Post.objects.get(pk=post_pk)
     comments = Comments.objects.filter(post=post_pk)
     counter = comments.count()
-
-    return render(request, 'blog/post_detail.html', {'post': post, 'comments': comments, 'counter': counter})
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.author = request.user
+            comment.post = post
+            comment.published_date = datetime.now()
+            comment.save()
+            return redirect('post_detail', post_pk=post.pk)
+    else:
+        comment_form = CommentForm()
+    return render(request, 'blog/post_detail.html', {'post': post,
+                                                     'comments': comments,
+                                                     'counter': counter,
+                                                     'comment_form': comment_form})
 
 
 def post_new(request):
     if request.method == "GET":
         form = PostForm
-        return render(request, 'blog/post_new.html', {'form': form})
+        category = Category.objects.all()
+        return render(request, 'blog/post_new.html', {'form': form, 'category': category})
     else:
         form = PostForm(request.POST)
         if form.is_valid():
@@ -70,3 +88,9 @@ def categories(request, category_pk):
     posts = Post.objects.filter(category=category_pk)
     category = Category.objects.all()
     return render(request, 'blog/post_list.html', {'items': posts, 'category': category})
+
+
+def delete_comments(request, post_pk, comments_pk):
+    post = Post.objects.get(pk=post_pk)
+    comment = get_object_or_404(Comments, pk=comments_pk).delete()
+    return redirect('post_detail', post_pk=post.pk)

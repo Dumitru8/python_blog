@@ -63,11 +63,26 @@
     <h2>Comments ({{counter}})</h2>
     {% for i in comments %}
         {{ i.author }}<br>
-        {{ i }}<br>
+        {{ i.text }}<br>
         <em>{{ i.published_date }}</em>
+        {% if user.id == i.author.id %}
+        <form action="delete_comments">
+            <input type="hidden" value="{{i.pk}}" name="pk">
+            <a href="{% url 'delete_comments' post_pk=post.pk comment_pk=i.pk %}">
+                Delete
+            </a>
+        </form>
+        {% endif %}
     <br><br>
     {% endfor %}
 </div>
+
+
+<form action="" method="POST">{% csrf_token %}
+    <p style="margin-top: 40px"> Add comment:</p>
+    {{ comment_form.as_p }}
+    <input style="margin-bottom: 50px" type="submit" value="publish"/>
+</form>
 
 
 </body>
