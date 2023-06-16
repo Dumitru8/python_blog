@@ -28,3 +28,12 @@ class Category(models.Model):
 
     def __str__(self):
         return f'{self.text}'
+
+class Feedback(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    text = models.TextField(verbose_name='Text')
+    date = models.DateTimeField(auto_now_add=True)
+    rating = models.IntegerField(verbose_name='Rating', default=3)
+    def __str__(self):
+        return f'{self.text}'

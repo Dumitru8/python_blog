@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
-from blog.models import Post, Comments, Category
+from blog.models import Post, Comments, Category, Feedback
 from blog.forms import PostForm, CommentForm
 
 
@@ -28,10 +28,17 @@ def published_post(request, post_pk):
     return render(request, 'blog/post_detail.html', {'post': post})
 
 
+def rating(post_pk):
+    fb = Feedback.objects.filter(post=post_pk)
+    count = sum([i.rating for i in fb]) / fb.count()
+    return round(count, 1)
+
+
 def post_detail(request, post_pk):
     post = Post.objects.get(pk=post_pk)
     comments = Comments.objects.filter(post=post_pk)
     counter = comments.count()
+    rate = rating(post_pk)
     if request.method == 'POST':
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
@@ -46,7 +53,8 @@ def post_detail(request, post_pk):
     return render(request, 'blog/post_detail.html', {'post': post,
                                                      'comments': comments,
                                                      'counter': counter,
-                                                     'comment_form': comment_form})
+                                                     'comment_form': comment_form,
+                                                     'rating': rate})
 
 
 def post_new(request):
@@ -90,7 +98,14 @@ def categories(request, category_pk):
     return render(request, 'blog/post_list.html', {'items': posts, 'category': category})
 
 
-def delete_comments(request, post_pk, comments_pk):
+def delete_comments(request, post_pk, comment_pk):
     post = Post.objects.get(pk=post_pk)
-    comment = get_object_or_404(Comments, pk=comments_pk).delete()
+    comment = get_object_or_404(Comments, pk=comment_pk).delete()
     return redirect('post_detail', post_pk=post.pk)
+
+def feedback(request, post_pk):
+    post = Post.objects.get(pk=post_pk)
+    fb = Feedback.objects.filter(post=post_pk)
+    context = {'fb': fb, 'post': post}
+    return render(request, 'blog/feedback.html', context)
+
