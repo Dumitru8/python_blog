@@ -8,6 +8,11 @@ class Post(models.Model):
     publish_date = models.DateTimeField(verbose_name='Publish Date', auto_now_add=True)
     published = models.BooleanField(default=False)
     category = models.ForeignKey('Category', on_delete=models.CASCADE, blank=True, null=True)
+    author = models.ForeignKey('auth.User', blank=True, null=True, on_delete=models.CASCADE)
+
+    @property
+    def rating(self):
+        return self.feedbacks.aggregate(models.Avg('rating')).get('rating__avg')
 
     def __str__(self):
         return f'{self.title}'
@@ -29,11 +34,13 @@ class Category(models.Model):
     def __str__(self):
         return f'{self.text}'
 
+
 class Feedback(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='feedbacks')
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     text = models.TextField(verbose_name='Text')
     date = models.DateTimeField(auto_now_add=True)
     rating = models.IntegerField(verbose_name='Rating', default=3)
+
     def __str__(self):
         return f'{self.text}'

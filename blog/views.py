@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from blog.models import Post, Comments, Category, Feedback
 from blog.forms import PostForm, CommentForm
+from django.urls import reverse
+from django.db.models import Avg
 
 
 def post_list(request):
@@ -30,8 +32,12 @@ def published_post(request, post_pk):
 
 def rating(post_pk):
     fb = Feedback.objects.filter(post=post_pk)
-    count = sum([i.rating for i in fb]) / fb.count()
-    return round(count, 1)
+    if fb.count() == 0:
+        sr_rating = 0
+    else:
+        sr_rating = sum([i.rating for i in fb]) / fb.count()
+        sr_rating = round(sr_rating, 2)
+    return sr_rating
 
 
 def post_detail(request, post_pk):
@@ -103,9 +109,14 @@ def delete_comments(request, post_pk, comment_pk):
     comment = get_object_or_404(Comments, pk=comment_pk).delete()
     return redirect('post_detail', post_pk=post.pk)
 
+
 def feedback(request, post_pk):
     post = Post.objects.get(pk=post_pk)
     fb = Feedback.objects.filter(post=post_pk)
     context = {'fb': fb, 'post': post}
     return render(request, 'blog/feedback.html', context)
 
+
+def recommendations(request):
+    posts = Post.objects.values('title', 'pk').annotate(Avg('feedbacks__rating')).order_by('-feedbacks__rating__avg')[:5]
+    return render(request, 'blog/recommendations.html', {'items': posts})

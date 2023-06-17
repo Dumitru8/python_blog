@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<style>
+    a {
+    text-decoration: none;
+    }
+    a: hover {
+<!--    font-size: 25px;-->
+        color: yellow
+    }
+</style>
+
+<div style="text-align: center; margin-top: 40px; margin-bottom: 40px">
+    <a style="font-size: 35px; color: black" href="{% url 'post_list' %}">My blog</a>
+</div>
+
+{% for i in items %}
+    <div style="margin:25px; margin-top: 5px; display: inline-block">
+        <div class="post_info">
+            <div class="titles">
+                <a href="{% url 'post_detail' post_pk=i.pk %}">{{ i.title }}</a>
+<!--                <a href="{% url 'post_detail' post_pk=i.pk %}">{{ i.feedbacks_rating__avg }}</a>-->
+            </div>
+            <div style="font-size: 16px; text-align: center; border-top: 1px solid">{{ i.publish_date }}</div>
+        </div>
+    </div>
+{% endfor %}
+</body>
+</html>
