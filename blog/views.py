@@ -120,3 +120,8 @@ def feedback(request, post_pk):
 def recommendations(request):
     posts = Post.objects.values('title', 'pk').annotate(Avg('feedbacks__rating')).order_by('-feedbacks__rating__avg')[:5]
     return render(request, 'blog/recommendations.html', {'items': posts})
+
+
+def my_posts(request):
+    post = Post.objects.filter(author=request.user)
+    return render(request, 'blog/post_auth.html', {'items': post})

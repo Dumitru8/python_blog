@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Post list</title>
+    <title>Post auth</title>
 </head>
 <body>
 <style>
@@ -15,15 +15,8 @@
     }
 </style>
 <!--    {{ items }}-->
-    <div style="text-align: center;">
-        <p style="font-size: 35px">My blog</p>
-    </div>
-
-<div style="font-size: 17px; margin-left: 88%; position: absolute; margin-right: 30px">
-    <h2>Category:</h2>
-    {% for i in category %}
-        <a href="{% url 'categories' category_pk=i.pk %}">{{ i }}</a><br>
-    {% endfor %}
+<div style="text-align: center; margin-top: 40px; margin-bottom: 40px">
+    <a style="font-size: 35px; color: black" href="{% url 'post_list' %}">My blog</a>
 </div>
 
     <div style="margin-left: 50px; margin-top: 40px; margin-bottom: 40px;">
@@ -55,17 +48,6 @@
     </div>
     {% endfor %}
 
-<div style="font-size: 20px; color: black; margin-left: 88%; border-top: 1px">
-    <a href="{% url 'recommendations' %}">
-        <p>Recommendations</p>
-    </a>
-</div>
-
-<div style="font-size: 20px; color: black; margin-left: 88%; border-top: 1px">
-    <a href="{% url 'my_posts' %}">
-        <p>My posts</p>
-    </a>
-</div>
 
 </body>
 </html>
